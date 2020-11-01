@@ -22,6 +22,7 @@ group :development, :test do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm'
   gem 'sass-rails', '~> 5.0'
+  gem 'turbolinks'
 end
 
 

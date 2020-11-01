@@ -1,5 +1,5 @@
 require_relative 'boot'
-
+require "sprockets/railtie"
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -15,6 +15,10 @@ module Blogtest
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+
+config.assets.css_compressor = :yui
+config.assets.js_compressor = :uglifier
+
   end
-  
+
 end
