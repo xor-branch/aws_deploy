@@ -6,7 +6,7 @@ gem 'sassc-rails'
 gem 'rails', '~> 5.2.4'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
-
+gem 'turbolinks'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'jbuilder', '~> 2.5'
@@ -23,7 +23,7 @@ group :development, :test do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm'
   gem 'sass-rails', '~> 5.0'
-  gem 'turbolinks'
+
 end
 
 
