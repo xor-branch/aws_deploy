@@ -15,6 +15,7 @@ gem 'figaro'
 gem 'dotenv-rails'
 gem 'unicorn'
 gem 'mini_racer'
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capistrano'
