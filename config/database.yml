@@ -83,3 +83,4 @@ production:
   <<: *default
   database: bishop_production
   username: bishop
+  password: bishop
