@@ -9,7 +9,7 @@ set :repo_url, 'https://github.com/Baroka-wp/blogtest.git'
 # The branch to deploy. The default is not necessarily master.
 set :branch, ENV['BRANCH'] || 'master'
 # The directory to deploy to.
-set :deploy_to, '/var/www/bishop'
+set :deploy_to, 'home/deploy/bishop'
 # Folders/files with symbolic links
 set :linked_files, %w{.env config/secrets.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets public/uploads}
