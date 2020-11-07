@@ -11,7 +11,7 @@ set :branch, ENV['BRANCH'] || 'master'
 # The directory to deploy to.
 set :deploy_to, 'home/deploy/bishop'
 # Folders/files with symbolic links
-set :linked_files, %w{.env config/secrets.yml}
+set :linked_files, %w{config/secrets.yml}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets public/uploads}
 set :keep_releases, 5
 # Ruby version
