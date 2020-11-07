@@ -1,25 +1,18 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.14.1"
 
-# Application name to deploy
+
 set :application, 'bishop'
-# git repository to clone
-# (Xxxxxxxx: user name, yyyyyyyy: application name)
-set :repo_url, 'https://github.com/Baroka-wp/blogtest.git'
-# The branch to deploy. The default is not necessarily master.
-set :branch, ENV['BRANCH'] || 'master'
-# The directory to deploy to.
-set :deploy_to, 'home/deploy/bishop'
-# Folders/files with symbolic links
-set :linked_files, %w{config/secrets.yml}
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets public/uploads}
+set :repo_url, 'https://github.com/Baroka-wp/blogtest.git' # Edit this to match your repository
+set :branch, :master
+set :deploy_to, '/home/deploy/bishop'
+set :pty, true
+set :linked_files, %w{config/database.yml config/application.yml}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
 set :keep_releases, 5
-# Ruby version
-set :rbenv_ruby, '2.6.5'
-set :rbenv_type, :system
-# The level of the log to output. If you want to see the error log in detail : debug Set to.
-# If it is for production environment : info is normal.
-# However, if you want to check the behavior firmly : debug Set to.
+set :rvm_type, :user
+set :rvm_ruby_version, 'ruby-2.6.5' # Edit this if you are using MRI Ruby
+
 set :log_level, :info
 namespace :deploy do
   desc 'Restart application'
@@ -36,19 +29,53 @@ namespace :deploy do
       end
     end
   end
-  desc 'Run seed'
-  task :seed do
-    on roles(:app) do
-      with rails_env: fetch(:rails_env) do
-        within current_path do
-          execute :bundle, :exec, :rake, 'db:seed'
-        end
-      end
-    end
-  end
   after :publishing, :restart
+   after :restart, :clear_cache do
+     on roles(:web), in: :groups, limit: 3, wait: 10 do
+     end
+   end
+ end
+
+# Default branch is :master
+# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+
+# Default deploy_to directory is /var/www/my_app_name
+# set :deploy_to, '/var/www/my_app_name'
+
+# Default value for :scm is :git
+# set :scm, :git
+
+# Default value for :format is :airbrussh.
+# set :format, :airbrussh
+
+# You can configure the Airbrussh format using :format_options.
+# These are the defaults.
+# set :format_options, command_output: true, log_file: 'log/capistrano.log', color: :auto, truncate: :auto
+
+# Default value for :pty is false
+# set :pty, true
+
+# Default value for :linked_files is []
+# set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
+
+# Default value for linked_dirs is []
+# set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system')
+
+# Default value for default_env is {}
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+
+# Default value for keep_releases is 5
+# set :keep_releases, 5
+
+namespace :deploy do
+
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
     end
   end
+
 end
