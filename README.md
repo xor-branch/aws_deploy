@@ -81,39 +81,53 @@ coller la clé ssh précédement copiée dans l'authorized_key
 ATTENTION, ce qui était là en commentaire
 :wq
 
-**installer postgresql
+**installer postgresql sur EC2**
 
 $ sudo apt-get install postgresql postgresql-contrib libpq-dev
 
 -créer un user postgresql
-$ sudo -u postgres createuser -s nom du projet
+$ sudo -u postgres createuser -s blog
 
--créer un mot de pass
-sudo -u postgres psql
+-créer un mot de passe
+$ sudo -u postgres psql
+$ postgres=# \password blog
 
-postgres=# \password urlshortner
+-créer la base de donnée
 
-
-sudo -u postgres createdb -O urlshortner urlshortner_production
-
+$ sudo -u postgres createdb -O blog blog_production
 
 su - deploy
-gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+
+**installer ruby et rails (avec rvm) sur EC2**
+
+$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 \curl -sSL https://get.rvm.io | bash -s stable
 
+$ rvm install 2.6.5 (votre  version exacte de ruby)
+$ rvm use 2.6.5 (pour définir cette version par défaut
+(/bin/bash --login ) au cas où l'utilisateur n'est pas connecter sur le profile
 
+$ gem install bundler --no-ri --no-rdoc
 
-rvm install 2.2.3
+**créer le projet sur Ec2**
 
+$ mkdir blog
+$ mkdir -p blog/shared/config
+$ vi blog/shared/config/database.yml
 
-gem install bundler --no-ri --no-rdoc
+(ajouter le code qui dans database)
 
+$ vi blog/shared/config/application.yml
+(ajouter le code qui dans application)
 
-mkdir urlshortner
-mkdir -p urlshortner/shared/config
-nano urlshortner/shared/config/database.yml
+**configurée le fichier config/deploy/production.rb**
+-changer le nom d'utilisateur (du EC2 que vous avez défini)
+-changer l'IP du serveur EC2
 
+**on peut déployer**
+$ cap production deploy
 
-nano urlshortner/shared/config/application.yml
+Vous pourriez avez besoin de d'installer nodejs
+$ sudo apt-get install nodejs
 
-
+une fois déployer, s'il n'ay a pas d'erreur,vous pouver taper votre adresse IP pour voir votre site
