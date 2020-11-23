@@ -1,0 +1,8 @@
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: blog_production
+  username: blog
+  password: votre mot de passe de base de donnée
+  host: localhost
+  port: 5432
