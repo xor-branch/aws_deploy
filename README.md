@@ -77,13 +77,55 @@ coller la clé ssh précédement copiée dans l'authorized_key
 **configurer nginx**
 
  $ sudo vi /etc/nginx/sites-available/default
-(voir la configuration dans nginx)
+( configuration  nginx)
+ATTENTION, ce qui était là en commentaire
 
-sudo apt-get install postgresql postgresql-contrib libpq-dev
+>
+upstream app {
+  # Path to Puma SOCK file, as defined previously
+  server unix:/home/deploy/urlshortner/shared/tmp/sockets/unicorn.sock fail_timeout=0;
+}
 
+server {
+  listen 80;
+  server_name localhost;
 
-sudo -u postgres createuser -s urlshortner
+  root /home/deploy/urlshortner/current/public;
 
+  try_files $uri/index.html $uri @app;
+
+  location / {
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $host;
+    proxy_redirect off;
+    proxy_http_version 1.1;
+    proxy_set_header Connection '';
+    proxy_pass http://app;
+  }
+
+   location ~ ^/(assets|fonts|system)/|favicon.ico|robots.txt {
+    gzip_static on;
+    expires max;
+    add_header Cache-Control public;
+  }
+
+  error_page 500 502 503 504 /500.html;
+  client_max_body_size 4G;
+  keepalive_timeout 10;
+}  
+>
+:wq
+
+**installer postgresql
+
+$ sudo apt-get install postgresql postgresql-contrib libpq-dev
+
+-créer un user postgresql
+$ sudo -u postgres createuser -s nom du projet
+
+-créer un mot de pass
 sudo -u postgres psql
 
 postgres=# \password urlshortner
