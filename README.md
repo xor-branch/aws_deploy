@@ -30,8 +30,8 @@ un pour le local et l'autre pour le serveur distants
 ---dans le terminal de EC2
 **se connecter à l'instance**
 télécharger la clé
-$ chmod 400 le nom de la clé.pem
-ensuit ssh -i 'nom de la clé' ubuntun@ec2-ip
+$ chmod 400 blog.pem
+$ ssh -i "blog.pem" ubuntu@ec2-54-156-57-141
 
 une fois connecté: faire les mises à jours et autre installations sur l'instance
 - sudo apt-get update && sudo apt-get -y upgrade
@@ -79,43 +79,6 @@ coller la clé ssh précédement copiée dans l'authorized_key
  $ sudo vi /etc/nginx/sites-available/default
 ( configuration  nginx)
 ATTENTION, ce qui était là en commentaire
-
->
-upstream app {
-  # Path to Puma SOCK file, as defined previously
-  server unix:/home/deploy/urlshortner/shared/tmp/sockets/unicorn.sock fail_timeout=0;
-}
-
-server {
-  listen 80;
-  server_name localhost;
-
-  root /home/deploy/urlshortner/current/public;
-
-  try_files $uri/index.html $uri @app;
-
-  location / {
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header Host $host;
-    proxy_redirect off;
-    proxy_http_version 1.1;
-    proxy_set_header Connection '';
-    proxy_pass http://app;
-  }
-
-   location ~ ^/(assets|fonts|system)/|favicon.ico|robots.txt {
-    gzip_static on;
-    expires max;
-    add_header Cache-Control public;
-  }
-
-  error_page 500 502 503 504 /500.html;
-  client_max_body_size 4G;
-  keepalive_timeout 10;
-}  
->
 :wq
 
 **installer postgresql
