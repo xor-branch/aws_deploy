@@ -13,3 +13,11 @@
  *= require_tree .
  *= require_self
  */
+
+.msg_payement{
+  font-size: 18px;
+  color:black;
+  border-left-width: 15px
+  border: 2px solid red;
+  padding-bottom:
+}
